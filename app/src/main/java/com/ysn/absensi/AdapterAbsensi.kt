@@ -1,0 +1,71 @@
+package com.ysn.absensi
+
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.TextView
+
+class AdapterAbsensi constructor(private val listKehadiran: MutableList<Kehadiran>) : RecyclerView.Adapter<AdapterAbsensi.ViewHolder>() {
+
+    override fun onCreateViewHolder(parent: ViewGroup, p1: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_adapter, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.setIsRecyclable(false) // Tell to RecyclerView that's not recycleable
+        val kehadiran = listKehadiran[position]
+        holder.textViewName.text = kehadiran.nama
+        when (kehadiran.tipeKehadiran) {
+            "hadir" -> {
+                holder.radioButtonHadir.isChecked = true
+            }
+            "absen" -> {
+                holder.radioButtonAbsen.isChecked = true
+            }
+            "sakit" -> {
+                holder.radioButtonSakit.isChecked = true
+            }
+            else -> {
+                /* nothing to do in here */
+            }
+        }
+    }
+
+    override fun getItemCount(): Int = listKehadiran.size
+
+    inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+        val textViewName: TextView = itemView.findViewById(R.id.text_view_name)
+        private val radioGroupAbsensi: RadioGroup = itemView.findViewById(R.id.radio_group_absensi)
+        val radioButtonHadir: RadioButton = itemView.findViewById(R.id.radio_button_hadir)
+        val radioButtonAbsen: RadioButton = itemView.findViewById(R.id.radio_button_absen)
+        val radioButtonSakit: RadioButton = itemView.findViewById(R.id.radio_button_sakit)
+
+        init {
+            radioGroupAbsensi.setOnCheckedChangeListener { _, id ->
+                val nama = listKehadiran[adapterPosition].nama
+                when (id) {
+                    R.id.radio_button_hadir -> {
+                        listKehadiran.set(adapterPosition, Kehadiran(nama, "hadir"))
+                    }
+                    R.id.radio_button_absen -> {
+                        listKehadiran.set(adapterPosition, Kehadiran(nama, "absen"))
+                    }
+                    R.id.radio_button_sakit -> {
+                        listKehadiran.set(adapterPosition, Kehadiran(nama, "sakit"))
+                    }
+                    else -> {
+                        /* nothing to do in here */
+                    }
+                }
+            }
+        }
+
+    }
+
+}
