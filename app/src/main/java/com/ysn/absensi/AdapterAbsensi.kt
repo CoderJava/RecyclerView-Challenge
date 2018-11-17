@@ -17,54 +17,57 @@ class AdapterAbsensi constructor(private val listKehadiran: MutableList<Kehadira
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.setIsRecyclable(false) // Tell to RecyclerView that's not recycleable
-        val kehadiran = listKehadiran[position]
-        holder.textViewName.text = kehadiran.nama
-        when (kehadiran.tipeKehadiran) {
-            "hadir" -> {
-                holder.radioButtonHadir.isChecked = true
-            }
-            "absen" -> {
-                holder.radioButtonAbsen.isChecked = true
-            }
-            "sakit" -> {
-                holder.radioButtonSakit.isChecked = true
-            }
-            else -> {
-                /* nothing to do in here */
-            }
-        }
+        holder.bind(position)
     }
 
     override fun getItemCount(): Int = listKehadiran.size
 
     inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
         val textViewName: TextView = itemView.findViewById(R.id.text_view_name)
+
         private val radioGroupAbsensi: RadioGroup = itemView.findViewById(R.id.radio_group_absensi)
         val radioButtonHadir: RadioButton = itemView.findViewById(R.id.radio_button_hadir)
         val radioButtonAbsen: RadioButton = itemView.findViewById(R.id.radio_button_absen)
         val radioButtonSakit: RadioButton = itemView.findViewById(R.id.radio_button_sakit)
 
         init {
-            radioGroupAbsensi.setOnCheckedChangeListener { _, id ->
-                val nama = listKehadiran[adapterPosition].nama
-                when (id) {
+            radioGroupAbsensi.setOnCheckedChangeListener { radioGroup, id ->
+                when (radioGroup.checkedRadioButtonId) {
                     R.id.radio_button_hadir -> {
-                        listKehadiran.set(adapterPosition, Kehadiran(nama, "hadir"))
+                        listKehadiran[adapterPosition].tipeKehadiran = "hadir"
                     }
                     R.id.radio_button_absen -> {
-                        listKehadiran.set(adapterPosition, Kehadiran(nama, "absen"))
+                        listKehadiran[adapterPosition].tipeKehadiran = "absen"
                     }
                     R.id.radio_button_sakit -> {
-                        listKehadiran.set(adapterPosition, Kehadiran(nama, "sakit"))
+                        listKehadiran[adapterPosition].tipeKehadiran = "sakit"
                     }
                     else -> {
-                        /* nothing to do in here */
+                        listKehadiran[adapterPosition].tipeKehadiran = ""
                     }
                 }
             }
         }
+
+        fun bind(position: Int) {
+            val kehadiran = listKehadiran[position]
+            textViewName.text = kehadiran.nama
+            when (kehadiran.tipeKehadiran) {
+                "hadir" -> {
+                    radioButtonHadir.isChecked = true
+                }
+                "absen" -> {
+                    radioButtonAbsen.isChecked = true
+                }
+                "sakit" -> {
+                    radioButtonSakit.isChecked = true
+                }
+                else -> {
+                    radioGroupAbsensi.clearCheck()
+                }
+            }
+        }
+
 
     }
 
