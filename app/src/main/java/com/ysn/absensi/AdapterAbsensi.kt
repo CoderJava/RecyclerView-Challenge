@@ -48,16 +48,15 @@ class AdapterAbsensi constructor(private val listKehadiran: MutableList<Kehadira
 
         init {
             radioGroupAbsensi.setOnCheckedChangeListener { _, id ->
-                val nama = listKehadiran[adapterPosition].nama
                 when (id) {
                     R.id.radio_button_hadir -> {
-                        listKehadiran.set(adapterPosition, Kehadiran(nama, "hadir"))
+                        listKehadiran[adapterPosition].tipeKehadiran = "hadir"
                     }
                     R.id.radio_button_absen -> {
-                        listKehadiran.set(adapterPosition, Kehadiran(nama, "absen"))
+                        listKehadiran[adapterPosition].tipeKehadiran = "absen"
                     }
                     R.id.radio_button_sakit -> {
-                        listKehadiran.set(adapterPosition, Kehadiran(nama, "sakit"))
+                        listKehadiran[adapterPosition].tipeKehadiran = "sakit"
                     }
                     else -> {
                         /* nothing to do in here */
