@@ -17,7 +17,22 @@ class AdapterAbsensi constructor(private val listKehadiran: MutableList<Kehadira
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(position)
+        val kehadiran = listKehadiran[position]
+        holder.textViewName.text = kehadiran.nama
+        when (kehadiran.tipeKehadiran) {
+            "hadir" -> {
+                holder.radioButtonHadir.isChecked = true
+            }
+            "absen" -> {
+                holder.radioButtonAbsen.isChecked = true
+            }
+            "sakit" -> {
+                holder.radioButtonSakit.isChecked = true
+            }
+            else -> {
+                holder.radioGroupAbsensi.clearCheck()
+            }
+        }
     }
 
     override fun getItemCount(): Int = listKehadiran.size
@@ -25,7 +40,7 @@ class AdapterAbsensi constructor(private val listKehadiran: MutableList<Kehadira
     inner class ViewHolder constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textViewName: TextView = itemView.findViewById(R.id.text_view_name)
 
-        private val radioGroupAbsensi: RadioGroup = itemView.findViewById(R.id.radio_group_absensi)
+        val radioGroupAbsensi: RadioGroup = itemView.findViewById(R.id.radio_group_absensi)
         val radioButtonHadir: RadioButton = itemView.findViewById(R.id.radio_button_hadir)
         val radioButtonAbsen: RadioButton = itemView.findViewById(R.id.radio_button_absen)
         val radioButtonSakit: RadioButton = itemView.findViewById(R.id.radio_button_sakit)
@@ -48,27 +63,6 @@ class AdapterAbsensi constructor(private val listKehadiran: MutableList<Kehadira
                 }
             }
         }
-
-        fun bind(position: Int) {
-            val kehadiran = listKehadiran[position]
-            textViewName.text = kehadiran.nama
-            when (kehadiran.tipeKehadiran) {
-                "hadir" -> {
-                    radioButtonHadir.isChecked = true
-                }
-                "absen" -> {
-                    radioButtonAbsen.isChecked = true
-                }
-                "sakit" -> {
-                    radioButtonSakit.isChecked = true
-                }
-                else -> {
-                    radioGroupAbsensi.clearCheck()
-                }
-            }
-        }
-
-
     }
 
 }
